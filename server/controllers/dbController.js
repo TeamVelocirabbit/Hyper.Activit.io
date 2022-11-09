@@ -91,6 +91,7 @@ dbController.verifyUser = (req, res, next) => {
 
   // Pull out the username and password from the request body
   const { username, password } = req.body;
+  
   console.log("Received username: " + username + " and password: " + password);
 
   // Find the user in the database
