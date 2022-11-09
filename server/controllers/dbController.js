@@ -299,9 +299,8 @@ dbController.updateUser = (req, res, next) => {
 
 // Update a team's information with a new activity
 dbController.addActivity = (req, res, next) => {
-  console.log("\n");
-  console.log("\n");
   // Log to let us know we're in the controller
+  console.log("\n");
   console.log("\u001b[1;32m dbController.addActivity called ");
   console.log("Req body", req.body);
   // Pull out the team_id from res.locals.team_id and the activity info from res.locals.activity
@@ -309,10 +308,6 @@ dbController.addActivity = (req, res, next) => {
   console.log("Received team_id: " + team_id);
   const activity = req.body.activity;
 
-  //     "activity": "Take your dog on a walk",
-  //     "type": "relaxation",
-  //     "participants": 1,
-  //     "price": 0,
   // Find the team in the DB and insert the activity object into its activities array
   Team.updateOne({ team_id: team_id }, { $push: { teamActivities: activity } })
     .then((team) => {
@@ -333,9 +328,12 @@ dbController.addActivity = (req, res, next) => {
 
 //// DELETE ////
 dbController.deleteTeam = (req, res, next) => {
+  // Log to let us know we're in the controller
+  console.log("\n");
   console.log("\u001b[1;32m dbController.deleteTeam called");
   const { team_id } = req.params;
 
+  // Find the team via params and delete its document
   Team.findOneAndDelete({ team_id }, (err, team) => {
     if (err) return next({
       log: `Error in dbController.deleteTeam: ${err}`,
@@ -346,8 +344,27 @@ dbController.deleteTeam = (req, res, next) => {
   })
 }
 
+dbController.editActivity = (req, res, next) => {
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.editActivity called");
+
+  const { teamName, activity, type, price } = req.body;
+  Team.findOneAndUpdate({ teamName }, { $set: { teamActivities: { activity } } })
+    .then(team => {
+      console.log('Updated team:', team);
+      return next;
+    })
+    .catch(err => next({
+      log: `Error in dbController.editActivity: ${err}`,
+      message: { err: "Error occurred in dbController.editActivity." }
+    }));
+
+  return next();
+}
+
 dbController.deleteActivity = (req, res, next) => {
-  // Declaring data received
+  // Log to let us know we're in the controller
+  console.log("\n");
   console.log("\u001b[1;32m dbController.deleteActivity called");
   const { teamId, activityName } = req.body;
   console.log('Deleting Activity:', activityName);
@@ -364,7 +381,6 @@ dbController.deleteActivity = (req, res, next) => {
         log: `Error in dbController.deleteActivity: ${err}`,
         message: { err: "Error occurred in dbController.deleteActivity." },
       }))
-
 }
 
 module.exports = dbController;

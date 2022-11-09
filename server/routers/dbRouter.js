@@ -39,8 +39,10 @@ router.post('/addActivity', dbController.addActivity, (req, res) => {
 })
 
 //// PUT routes ////
-// Goals: Change current activity
 // Check in frontend on what data type/edits they'll be sending
+router.put('/editActivity', dbController.editActivity, (req, res) => {
+  return res.status(200).json({update: 'Activity updated'})
+})
 
 //// DELETE routes ////
 // Delete team
