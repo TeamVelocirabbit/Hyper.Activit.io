@@ -59,7 +59,7 @@ router.delete('/deleteActivity', dbController.deleteActivity, (req, res) => {
   return res.status(200).json({deleted: res.locals.updatedTeam});
 })
 
-router.delete('/deleteUser', dbController.deleteUser, (req, res) => {
+router.delete('/deleteUser/:username', dbController.deleteUser, (req, res) => {
   return res.status(200).json({deleted: 'User deleted'});
 })
 

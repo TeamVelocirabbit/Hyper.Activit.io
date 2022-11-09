@@ -8,7 +8,7 @@ const saltRounds = process.env.SALT_ROUNDS || 10;
 // const path = require("path");
 // require('dotenv').config({path: path.resolve(__dirname, '../../process.env')});
 // const mongoose = require("mongoose");
-// const db = require("../db/db.js");
+const db = require("../db/db.js");
 
 const dbController = {};
 
@@ -400,10 +400,22 @@ dbController.deleteActivity = (req, res, next) => {
 
 // Goal: Delete current user
 dbController.deleteUser = (req, ers, next) => {
+  // Log to let us know we're in the controller
   console.log("\n");
   console.log("\u001b[1;32m dbController.deleteUser called");
 
-  return next();
+  const { username } = req.params;
+  User.findOneAndDelete({ username }, (err, deleted) => {
+    if (err) {
+      return next({
+        log: `Error in dbController.deleteUser: ${err}`,
+        message: { err: "Error occurred in dbController.deleteUser" }
+      })
+    }
+    // Succesful deletion
+    console.log('Succesfully deleted:', deleted);
+    return next();
+  })
 }
 
 module.exports = dbController;
