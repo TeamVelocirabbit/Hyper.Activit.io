@@ -16,6 +16,7 @@ function TotalTeamDisplay() {
 
   // Parse through to create team card displays
   const teamCardDisplay = totalTeams.map(team => {
+    console.log('teamCardDisplay', team)
     return (
       <TeamCard
         key={team.team_id}

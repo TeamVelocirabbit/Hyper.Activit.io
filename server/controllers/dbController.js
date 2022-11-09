@@ -218,7 +218,6 @@ dbController.createUser = async (req, res, next) => {
 // Create a new team
 dbController.createTeam = (req, res, next) => {
   console.log("\n");
-  console.log("\n");
   // Log to let us know we're in the controller
   console.log("\u001b[1;32m dbController.createTeam called ");
 
@@ -252,7 +251,7 @@ dbController.createTeam = (req, res, next) => {
   })
     .then((team) => {
       // Log to let us know the team was saved
-      console.log("\u001b[1:32m Team saved to database ");
+      console.log("\u001b[1:32m Team saved to database:", team);
       res.locals.team = team;
       // Move to the next middleware
       return next();

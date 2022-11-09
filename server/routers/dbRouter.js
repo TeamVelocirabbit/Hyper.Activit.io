@@ -33,12 +33,13 @@ router.post('/register', dbController.createUser,  (req, res) => {
 
 // Route to add a new team to the database
 router.post('/team', dbController.createTeam, dbController.updateUser, (req, res) => {
-  return res.status(200).json(res.locals.team_info);
+  console.log('Logging res.locals.team inside of router', res.locals.team);
+  return res.status(200).json(res.locals.team);
 });
 
 // Route to add activity to a specific team
 router.post('/addActivity', dbController.addActivity, (req, res) => {
-  return res.status(200).json(res.locals.team);
+  return res.status(200).json(res.locals.team_info);
 })
 
 //// PUT routes ////

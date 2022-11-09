@@ -44,14 +44,12 @@ function CreateTeam(props) {
       Team: ${teamName}
       NewMembers: ${newMembersArr}
     `);
-    // Alex:Backend - POST new team info to DB
-    // Test POST
-    const newTeam = {
+    let newTeam = {
       teamName,
       teamMembers: [props.username].concat(newMembersArr),
       teamActivities: [],
-    };
-
+    };;
+    // POST
     fetch('/db/team', {
       method: 'POST',
       headers: {
@@ -62,10 +60,16 @@ function CreateTeam(props) {
         teamName: newTeam.teamName,
         teamMembers: newTeam.teamMembers,
       }),
-    }).catch((err) => console.log(err));
+    })
+      .then(res => res.json())
+      .then(team => {
+        console.log('Team information:', team)
+        // Update higher state DB
+        newTeam.team_id = team.team_id,
+        props.sync([...totalTeamsArr].concat(newTeam));
+      })
+      .catch((err) => console.log(err));
 
-    // Update higher state DB
-    props.sync([...totalTeamsArr].concat(newTeam));
     // Alert that team has been created
     alert(`Team ${teamName} has been created!`);
     setMemberLength(1);
