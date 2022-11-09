@@ -6,8 +6,8 @@ cookieController.setCookie = (req, res, next) => {
 }
 
 cookieController.setSSIDCookie = (req, res, next) => {
-    res.cookie('ssid', res.locals.user.id, {httpOnly: true});
     console.log('in set SSID')
+    res.cookie('ssid', res.locals.user.id, {httpOnly: true});
     return next();
 }
 

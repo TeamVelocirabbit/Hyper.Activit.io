@@ -1,6 +1,7 @@
 const express = require('express');
 const dbController = require('../controllers/dbController.js');
 const cookieController = require('../controllers/cookieController.js');
+const sessionController = require('../controllers/sessionController.js')
 const router = express.Router();
 const cors = require('cors');
 // Figure out what sort of get requests may be necessary
@@ -21,12 +22,12 @@ router.get('/teaminfo/:team_id', dbController.getTeamInfo, (req, res) => {
 //// POST routes ////
 // Route to verify user on login/return boolean
 
-router.post('/login', dbController.verifyUser,  (req, res) => {
+router.post('/login', dbController.verifyUser, cookieController.setSSIDCookie, (req, res) => {
   return res.status(200).json({login_success: true});
 });
 
 // Route to add a new user to the database
-router.post('/register', dbController.createUser, cookieController.setSSIDCookie, (req, res) => {
+router.post('/register', dbController.createUser,  (req, res) => {
   return res.status(200).json(res.locals.register_response);
 });
 
