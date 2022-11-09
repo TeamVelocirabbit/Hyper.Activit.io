@@ -20,6 +20,7 @@ function TotalTeamDisplay() {
       <TeamCard
         key={team.team_id}
         teamName={team.teamName}
+        team_id={team.team_id}
         teamMembers={team.teamMembers}
         teamActivities={team.teamActivities}
       />

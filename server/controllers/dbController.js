@@ -339,7 +339,7 @@ dbController.editActivity = (req, res, next) => {
   console.log("\u001b[1;32m dbController.editActivity called");
 
   const { teamName, activity, newActivity } = req.body;
-  
+
   Team.findOneAndUpdate({ teamName, "teamActivities.activity": activity }, { $set: { "teamActivities.$.activity": newActivity } })
     .then(team => {
       console.log(`Edited "${activity}" with "${newActivity}" in Team: ${team.teamName}`);
@@ -368,9 +368,9 @@ dbController.deleteTeam = (req, res, next) => {
   // Log to let us know we're in the controller
   console.log("\n");
   console.log("\u001b[1;32m dbController.deleteTeam called");
-  const { team_id } = req.params;
+  const { team_id } = req.body;
 
-  // Find the team via params and delete its document
+  // Find the team via body and delete its document
   Team.findOneAndDelete({ team_id }, (err, team) => {
     if (err)
       return next({
@@ -388,29 +388,17 @@ dbController.deleteTeamFromUser = (req, res, next) => {
   console.log('\u001b[1;32m dbController.deleteTeamFromUser called');
   const { username } = req.body;
   const { deletedTeam } = res.locals;
-  const teamId = deletedTeam.team_id;
-  User.findOneAndUpdate({ username }, { $unset: { [deletedTeam.team_id]: '' } })
-    .then(data => console.log('data', data))
+  
+  const _teamId = `teams.${deletedTeam.team_id}`;
+  User.findOneAndUpdate({ username }, { $unset: { [_teamId]: 1 } })
+    .then(data => {
+      console.log('Updated teams', data);
+      return next()
+    })
     .catch(err => next({
       log: `Error in dbController.deleteTeamFromUser: ${err}`,
       message: { err: 'Error occurred in dbController.deleteTeamFromUser.' },
     }))
-  return next();
-}
-
-dbController.deleteTeamFromUser = (req, res, next) => {
-  console.log('\n');
-  console.log('\u001b[1;32m dbController.deleteTeamFromUser called');
-  const { username } = req.body;
-  const { deletedTeam } = res.locals;
-  const teamId = deletedTeam.team_id;
-  User.findOneAndUpdate({ username }, { $unset: { [deletedTeam.team_id]: '' } })
-    .then(data => console.log('data', data))
-    .catch(err => next({
-      log: `Error in dbController.deleteTeamFromUser: ${err}`,
-      message: { err: 'Error occurred in dbController.deleteTeamFromUser.' },
-    }))
-  return next();
 }
 
 // Delete current activity for specific team
