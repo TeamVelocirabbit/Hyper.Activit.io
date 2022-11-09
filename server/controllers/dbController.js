@@ -185,7 +185,7 @@ dbController.createUser = async (req, res, next) => {
         user_id: randomAlphanumeric,
         username,
         password: hashedPassword,
-        teams: { test: "test" },
+        teams: {} 
       })
         .then((user) => {
           // Log to let us know the user was saved
@@ -330,5 +330,21 @@ dbController.addActivity = (req, res, next) => {
       });
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Delete Activity
 
 module.exports = dbController;
