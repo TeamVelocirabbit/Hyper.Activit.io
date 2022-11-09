@@ -43,20 +43,14 @@ router.post('/addActivity', dbController.addActivity, (req, res) => {
 // Check in frontend on what data type/edits they'll be sending
 
 //// DELETE routes ////
-// Goals: Add delete for activities and accounts
-
-
-
-
-
-
-
-
-
-
-// Alex working on delete
-router.delete('/deleteActivity', (req, res) => {
-  console.log('');
-  return res.status(200).json({deleted: 'Delete test succesful'});
+// Delete team
+router.delete('/deleteTeam/:team_id', dbController.deleteTeam, (req, res) => {
+  return res.status(200).json({deleted: 'Delete team successful'});
 })
+
+// Delete activity from team
+router.delete('/deleteActivity', dbController.deleteActivity, (req, res) => {
+  return res.status(200).json({deleted: res.locals.updatedTeam});
+})
+
 module.exports = router;

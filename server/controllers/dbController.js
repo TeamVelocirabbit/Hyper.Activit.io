@@ -171,7 +171,7 @@ dbController.createUser = async (req, res, next) => {
       console.log(`\u001b[1:32m Username does not exist `);
       // Hash the password
       const hashedPassword = bcrypt.hashSync(password, saltRounds);
-      console.log('Hashed password: ',hashedPassword, ' data type:', typeof hashedPassword);
+      console.log('Hashed password: ', hashedPassword, ' data type:', typeof hashedPassword);
 
       // Why?
       // Generate a random userID for the new user
@@ -185,7 +185,7 @@ dbController.createUser = async (req, res, next) => {
         user_id: randomAlphanumeric,
         username,
         password: hashedPassword,
-        teams: {} 
+        teams: {}
       })
         .then((user) => {
           // Log to let us know the user was saved
@@ -331,20 +331,40 @@ dbController.addActivity = (req, res, next) => {
     });
 };
 
+//// DELETE ////
+dbController.deleteTeam = (req, res, next) => {
+  console.log("\u001b[1;32m dbController.deleteTeam called");
+  const { team_id } = req.params;
 
+  Team.findOneAndDelete({ team_id }, (err, team) => {
+    if (err) return next({
+      log: `Error in dbController.deleteTeam: ${err}`,
+      message: { err: 'Error occured in dbController.deleteTeam' }
+    })
+    console.log('Team deleted:', team);
+    return next();
+  })
+}
 
+dbController.deleteActivity = (req, res, next) => {
+  // Declaring data received
+  console.log("\u001b[1;32m dbController.deleteActivity called");
+  const { teamId, activityName } = req.body;
+  console.log('Deleting Activity:', activityName);
 
+  // Find team by id and remove from an array all instances of a value matching the specified condition
+  Team.findOneAndUpdate({ team_id: teamId }, { $pull: { teamActivities: { activity: activityName } } })
+    .then(team => {
+      console.log('Updated team:', team);
+      res.locals.updatedTeam = team;
+      return next();
+    })
+    .catch(err =>
+      next({
+        log: `Error in dbController.deleteActivity: ${err}`,
+        message: { err: "Error occurred in dbController.deleteActivity." },
+      }))
 
-
-
-
-
-
-
-
-
-
-
-// Delete Activity
+}
 
 module.exports = dbController;
