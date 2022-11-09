@@ -1,12 +1,13 @@
 const Team = require("../db/mongo/TeamModel.js");
 const User = require("../db/mongo/UserModel.js");
-const path = require("path");
 const bcrypt = require("bcrypt");
 const saltRounds = process.env.SALT_ROUNDS || 10;
 
-// Are these being used ?
-/* require('dotenv').config({path: path.resolve(__dirname, '../../process.env')});*/
-const mongoose = require("mongoose");
+///// Are these being used ?
+///// Verify before deleting.
+// const path = require("path");
+// require('dotenv').config({path: path.resolve(__dirname, '../../process.env')});
+// const mongoose = require("mongoose");
 const db = require("../db/db.js");
 
 const dbController = {};
@@ -171,7 +172,7 @@ dbController.createUser = async (req, res, next) => {
       console.log(`\u001b[1:32m Username does not exist `);
       // Hash the password
       const hashedPassword = bcrypt.hashSync(password, saltRounds);
-      console.log('Hashed password: ',hashedPassword, ' data type:', typeof hashedPassword);
+      console.log('Hashed password: ', hashedPassword, ' data type:', typeof hashedPassword);
 
       // Why?
       // Generate a random userID for the new user
@@ -185,7 +186,7 @@ dbController.createUser = async (req, res, next) => {
         user_id: randomAlphanumeric,
         username,
         password: hashedPassword,
-        teams: {} 
+        teams: {}
       })
         .then((user) => {
           // Log to let us know the user was saved
@@ -263,7 +264,6 @@ dbController.createTeam = (req, res, next) => {
 // Update a user's information
 dbController.updateUser = (req, res, next) => {
   console.log("\n");
-  console.log("\n");
   // Log to let us know we're in the controller
   console.log("\u001b[1;32m dbController.updateUser called ");
 
@@ -299,9 +299,8 @@ dbController.updateUser = (req, res, next) => {
 
 // Update a team's information with a new activity
 dbController.addActivity = (req, res, next) => {
-  console.log("\n");
-  console.log("\n");
   // Log to let us know we're in the controller
+  console.log("\n");
   console.log("\u001b[1;32m dbController.addActivity called ");
   console.log("Req body", req.body);
   // Pull out the team_id from res.locals.team_id and the activity info from res.locals.activity
@@ -309,10 +308,6 @@ dbController.addActivity = (req, res, next) => {
   console.log("Received team_id: " + team_id);
   const activity = req.body.activity;
 
-  //     "activity": "Take your dog on a walk",
-  //     "type": "relaxation",
-  //     "participants": 1,
-  //     "price": 0,
   // Find the team in the DB and insert the activity object into its activities array
   Team.updateOne({ team_id: team_id }, { $push: { teamActivities: activity } })
     .then((team) => {
@@ -331,20 +326,96 @@ dbController.addActivity = (req, res, next) => {
     });
 };
 
+//// UPDATE ////
+// Edit activity to be another name
+// Stretch: Expand to edit style and price
+dbController.editActivity = (req, res, next) => {
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.editActivity called");
 
+  const { teamName, activity, newActivity } = req.body;
+  
+  Team.findOneAndUpdate({ teamName, "teamActivities.activity": activity }, { $set: { "teamActivities.$.activity": newActivity } })
+    .then(team => {
+      console.log(`Edited "${activity}" with "${newActivity}" in Team: ${team.teamName}`);
+      return next;
+    })
+    .catch(err => next({
+      log: `Error in dbController.editActivity: ${err}`,
+      message: { err: "Error occurred in dbController.editActivity." }
+    }));
 
+  return next();
+}
 
+// Goal: Edit team/members
+dbController.editTeam = (req, res, next) => {
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.editTeam called");
 
+  // Flesh out query
 
+  return next();
+}
 
+//// DELETE ////
+dbController.deleteTeam = (req, res, next) => {
+  // Log to let us know we're in the controller
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.deleteTeam called");
+  const { team_id } = req.params;
 
+  // Find the team via params and delete its document
+  Team.findOneAndDelete({ team_id }, (err, team) => {
+    if (err) return next({
+      log: `Error in dbController.deleteTeam: ${err}`,
+      message: { err: 'Error occured in dbController.deleteTeam' }
+    })
+    console.log('Team deleted:', team);
+    return next();
+  })
+}
 
+// Delete current activity for specific team
+dbController.deleteActivity = (req, res, next) => {
+  // Log to let us know we're in the controller
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.deleteActivity called");
+  const { teamId, activityName } = req.body;
+  console.log('Deleting Activity:', activityName);
 
+  // Find team by id and remove from an array all instances of a value matching the specified condition
+  Team.findOneAndUpdate({ team_id: teamId }, { $pull: { teamActivities: { activity: activityName } } })
+    .then(team => {
+      console.log('Updated team:', team);
+      res.locals.updatedTeam = team;
+      return next();
+    })
+    .catch(err =>
+      next({
+        log: `Error in dbController.deleteActivity: ${err}`,
+        message: { err: "Error occurred in dbController.deleteActivity." },
+      }))
+}
 
+// Goal: Delete current user
+dbController.deleteUser = (req, ers, next) => {
+  // Log to let us know we're in the controller
+  console.log("\n");
+  console.log("\u001b[1;32m dbController.deleteUser called");
 
-
-
-
-// Delete Activity
+  const { username } = req.params;
+  User.findOneAndDelete({ username }, (err, deleted) => {
+    if (err) {
+      return next({
+        log: `Error in dbController.deleteUser: ${err}`,
+        message: { err: "Error occurred in dbController.deleteUser" }
+      })
+    }
+    // Succesful deletion
+    console.log('Succesfully deleted:', deleted);
+    return next();
+  })
+}
 
 module.exports = dbController;
