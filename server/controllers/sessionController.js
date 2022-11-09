@@ -11,11 +11,13 @@ sessionController.isLoggedIn = (req, res, next) => {
 
     Session.findOne({ cookieId: req.cookies.ssid }, (err, session) => {
         if (err) {
-            return next('Error in sessionController.isLoggedIn: ' + JSON.stringify(err));
+            return next({
+                log: `Error in sessionController.isLoggedIn: ${err}`,
+                message: { err: "Error occurred in sessionController.isLoggedIn." },
+              });
         } else if (!session) {
             res.redirect('/register');
         } else {
-
             return next();
         }
     })

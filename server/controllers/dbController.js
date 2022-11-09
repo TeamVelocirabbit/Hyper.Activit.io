@@ -97,7 +97,6 @@ dbController.verifyUser = (req, res, next) => {
   // Find the user in the database
   User.findOne({ username: username })
     .then((user) => {
-      console.log(user)
       // Log to let us know the user was found
       console.log(`\u001b[1:32m User found in database: `);
       console.group();
