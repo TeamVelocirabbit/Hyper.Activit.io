@@ -41,24 +41,28 @@ router.post('/addActivity', dbController.addActivity, (req, res) => {
 })
 
 //// PUT routes ////
-// Goals: Change current activity
 // Check in frontend on what data type/edits they'll be sending
+router.put('/editActivity', dbController.editActivity, (req, res) => {
+  return res.status(200).json({update: 'Activity updated'});
+})
+
+router.put('/editTeam', dbController.editTeam, (req, res) => {
+  return res.status(200).json({update: 'Team updated'});
+})
 
 //// DELETE routes ////
-// Goals: Add delete for activities and accounts
-
-
-
-
-
-
-
-
-
-
-// Alex working on delete
-router.delete('/deleteActivity', (req, res) => {
-  console.log('');
-  return res.status(200).json({deleted: 'Delete test succesful'});
+// Delete team
+router.delete('/deleteTeam/:team_id', dbController.deleteTeam, (req, res) => {
+  return res.status(200).json({deleted: 'Delete team successful'});
 })
+
+// Delete activity from team
+router.delete('/deleteActivity', dbController.deleteActivity, (req, res) => {
+  return res.status(200).json({deleted: res.locals.updatedTeam});
+})
+
+router.delete('/deleteUser/:username', dbController.deleteUser, (req, res) => {
+  return res.status(200).json({deleted: 'User deleted'});
+})
+
 module.exports = router;
