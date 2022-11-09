@@ -30,6 +30,9 @@ function CustomActivity () {
         "team_id": location.state,
         "activity": {
           activity: activity,
+          type: type,
+          price: price,
+          participants: participants
         }
       })
     })
@@ -48,9 +51,44 @@ function CustomActivity () {
               placeholder='Type your activity here...'
               onChange={(e) => setActivity(e.target.value) } 
               value={activity}
-            /> 
+            />
+            <input 
+              type="text"
+              className='form-input-box'
+              placeholder='How many participants for this activity?'
+              onChange={(e) => setParticipants(e.target.value) } 
+              value={participants}
+            />  
+            <select 
+              id='typeselect'
+              onChange={(e) => setType(e.target.value) } 
+              value={type}>
+              <option value="" disabled selected>Type of Activity</option>
+              <option value="social">Social</option>
+              <option value="education">Education</option>
+              <option value="cooking">Cooking</option>
+              <option value="charity">Charity</option>
+              <option value="recreational">Recreational</option>
+              <option value="diy">D.I.Y.</option>
+              <option value="music">Music</option>
+              <option value="relaxation">Relaxation</option>
+              <option value="busywork">Busywork</option>
+            </select>
+            <select 
+              id='priceselect'
+              onChange={(e) => setPrice(e.target.value) } 
+              value={price}>
+              <option value="" disabled selected>Price of Activity</option>
+              <option value="0.0">Free!</option>
+              <option value="0.25">$</option>
+              <option value="0.50">$$</option>
+              <option value="0.75">$$$</option>
+              <option value="1.0">$$$$</option>
+            </select>
           </div>
-          <button className='button'>Add Activity</button>
+          <Link to='/TeamInfo'>
+            <button className='button'>Add Activity</button>
+          </Link>
           <Link to='/home'>
             <button className='button'>Cancel</button>
           </Link>
