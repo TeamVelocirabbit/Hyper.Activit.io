@@ -133,11 +133,6 @@ function TeamInfo(props) {
     navigate('/customActivity')
   }
 
-  const newActivity = () => {
-    console.log('navigating to custom activity form', teamInfo.teamName);
-    navigate('/customActivity')
-  }
-
   // Populate team members + activities
   const teamMembers = teamInfo.teamMembers.map((ele) => (
     <li key={ele}>{ele}</li>
