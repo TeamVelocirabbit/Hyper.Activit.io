@@ -33,22 +33,22 @@ const ActivityInfo = (props) => {
             // remove targeted activity from team array and store it in targetedArray variable to send to server to delete
             targetedAct = team.teamActivities.splice(i, 1);
         }
+        console.log('targetedAct', targetedAct[0].activity);
+        console.log('teamID', team.team_id);
+        // Harvey: Send delete request to server to delete targeted card
+        fetch('/db/deleteActivity', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            activityName: targetedAct[0].activity, // 'Go to a local thrift shop'
+            teamId: team.team_id, // 'zqzxiwogk0bi6y4lyo6xsm'
+          }),
+        }).catch((err) => console.log(err));
         break;
       }
     }
-    console.log('targetedAct', targetedAct[0]);
-    console.log('teamID', team.teamId);
-    // Harvey: Send delete request to server to delete targeted card
-    fetch('/db/deleteActivity', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        activityName: targetedAct[0],
-        teamId: team.teamId,
-      }),
-    }).catch((err) => console.log(err));
 
     alert('Deleted activity!');
     props.sync(teamsContextClone);
