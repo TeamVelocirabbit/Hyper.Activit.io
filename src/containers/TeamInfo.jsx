@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { TeamsContext } from '../App.jsx';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function TeamInfo(props) {
   const navigate = useNavigate();
@@ -118,10 +119,17 @@ function TeamInfo(props) {
         deletionClone.splice(i, 1);
       }
     }
-
-    fetch(`/deleteTeam/${teamInfo.team_id}`, {
+    // console.log('fetch', teamInfo.team_id, location.state.teamMembers[0]);
+    fetch('/db/deleteTeam', {
       method: 'DELETE',
-    }).catch((err) => console.log(err));
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        team_id: teamInfo.team_id,
+        username: location.state.teamMembers[0],
+      }),
+    }).catch((err) => console.log('From deleteTeam:', err));
 
     alert('Team has been deleted!');
     props.sync(deletionClone);
