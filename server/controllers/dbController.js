@@ -1,13 +1,14 @@
 const Team = require("../db/mongo/TeamModel.js");
 const User = require("../db/mongo/UserModel.js");
-const path = require("path");
 const bcrypt = require("bcrypt");
 const saltRounds = process.env.SALT_ROUNDS || 10;
 
-// Are these being used ?
-/* require('dotenv').config({path: path.resolve(__dirname, '../../process.env')});*/
-const mongoose = require("mongoose");
-const db = require("../db/db.js");
+///// Are these being used ?
+///// Verify before deleting.
+// const path = require("path");
+// require('dotenv').config({path: path.resolve(__dirname, '../../process.env')});
+// const mongoose = require("mongoose");
+// const db = require("../db/db.js");
 
 const dbController = {};
 
@@ -262,7 +263,6 @@ dbController.createTeam = (req, res, next) => {
 
 // Update a user's information
 dbController.updateUser = (req, res, next) => {
-  console.log("\n");
   console.log("\n");
   // Log to let us know we're in the controller
   console.log("\u001b[1;32m dbController.updateUser called ");
