@@ -50,7 +50,7 @@ router.put('/editTeam', dbController.editTeam, (req, res) => {
 
 //// DELETE routes ////
 // Delete team
-router.delete('/deleteTeam/:team_id', dbController.deleteTeam, (req, res) => {
+router.delete('/deleteTeam/', dbController.deleteTeam, dbController.deleteTeamFromUser, (req, res) => {
   return res.status(200).json({deleted: 'Delete team successful'});
 })
 
