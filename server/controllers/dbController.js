@@ -348,10 +348,11 @@ dbController.editActivity = (req, res, next) => {
   console.log("\n");
   console.log("\u001b[1;32m dbController.editActivity called");
 
-  const { teamName, activity, type, price } = req.body;
-  Team.findOneAndUpdate({ teamName }, { $set: { teamActivities: { activity } } })
+  const { teamName, activity, newActivity } = req.body;
+  
+  Team.findOneAndUpdate({ teamName, "teamActivities.activity": activity }, { $set: { "teamActivities.$.activity": newActivity } })
     .then(team => {
-      console.log('Updated team:', team);
+      console.log(`Edited "${activity}" with "${newActivity}" in Team: ${team.teamName}`);
       return next;
     })
     .catch(err => next({
