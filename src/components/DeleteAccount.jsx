@@ -5,13 +5,15 @@ function DeleteAccount(username) {
   const navigate = useNavigate();
   const location = useLocation();
   if (location.pathname === '/') return null;
+  // deleteAcc invoked when user clicks on deleteAccount button
   function deleteAcc() {
-    console.log('username', username.username);
     if (confirm('Are you sure you want to delete your account?')) {
-      fetch(`/deleteUser/${username.username}`, {
+      // delete account if user confirms the prompt message
+      fetch(`/db/deleteUser/${username.username}`, {
         method: 'DELETE',
       }).catch((err) => console.log(err));
       alert('Account has been deleted!');
+      // redirect to root path
       navigate('/');
     } else {
       alert('Good, stay... forever..');
