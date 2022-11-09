@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { TeamsContext } from '../App.jsx';
+import axios from 'axios';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 function TeamInfo(props) {
@@ -12,7 +13,7 @@ function TeamInfo(props) {
   );
   console.log('totalTeamsArr', totalTeamsArr);
   console.log('currTeam', currTeam);
-  console.log('props',props);
+  console.log('props', props);
 
   // Initialize state to currTeams data (Obj)
   // *currTeam is a single object inside of an array which is why the spread
@@ -119,10 +120,17 @@ function TeamInfo(props) {
         deletionClone.splice(i, 1);
       }
     }
-
-    fetch(`/deleteTeam/${teamInfo.team_id}`, {
+    // console.log('fetch', teamInfo.team_id, location.state.teamMembers[0]);
+    fetch('/db/deleteTeam', {
       method: 'DELETE',
-    }).catch((err) => console.log(err));
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        team_id: teamInfo.team_id,
+        username: location.state.teamMembers[0],
+      }),
+    }).catch((err) => console.log('From deleteTeam:', err));
 
     alert('Team has been deleted!');
     props.sync(deletionClone);
@@ -131,8 +139,8 @@ function TeamInfo(props) {
 
   const newActivity = () => {
     console.log('navigating to custom activity form', teamInfo.teamName);
-    navigate('/customActivity')
-  }
+    navigate('/customActivity');
+  };
 
   // Populate team members + activities
   const teamMembers = teamInfo.teamMembers.map((ele) => (
@@ -154,7 +162,6 @@ function TeamInfo(props) {
           Delete Team
         </button>
         <button
-          
           className='button align-self-end'
           onClick={() => {
             console.log('Updating activities');
@@ -162,20 +169,20 @@ function TeamInfo(props) {
           }}
         >
           Random Activity
-      </button>
-      {/* <Link to={{
+        </button>
+        {/* <Link to={{
       pathname: '/CustomActivity',
       state: {team_id: teamInfo.team_id}
     }} >  */}
-      <Link to='/CustomActivity'
-           state={teamInfo.team_id}  >
-        <button
-          className='button align-self-end'
-          onClick={() => {
-            console.log('Trigger create a custom activity')
-            newActivity();
-          }}>
-          Custom Activity
+        <Link to='/CustomActivity' state={teamInfo.team_id}>
+          <button
+            className='button align-self-end'
+            onClick={() => {
+              console.log('Trigger create a custom activity');
+              newActivity();
+            }}
+          >
+            Custom Activity
           </button>
         </Link>
       </div>
