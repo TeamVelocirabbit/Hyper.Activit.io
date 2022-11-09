@@ -384,7 +384,7 @@ dbController.deleteTeamFromUser = (req, res, next) => {
   const { username } = req.body;
   const { deletedTeam } = res.locals;
   const teamId = deletedTeam.team_id;
-  User.findOneAndUpdate({ username }, { $unset: { [deletedTeam.team_id]: 1 } })
+  User.findOneAndUpdate({ username }, { $unset: { [deletedTeam.team_id]: '' } })
     .then(data => console.log('data', data))
     .catch(err => next({
       log: `Error in dbController.deleteTeamFromUser: ${err}`,
