@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { TeamsContext } from '../App.jsx';
-import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 function TeamInfo(props) {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ function TeamInfo(props) {
   );
   console.log('totalTeamsArr', totalTeamsArr);
   console.log('currTeam', currTeam);
+  console.log('props', props);
 
   // Initialize state to currTeams data (Obj)
   // *currTeam is a single object inside of an array which is why the spread
@@ -136,6 +137,11 @@ function TeamInfo(props) {
     navigate('/home');
   };
 
+  const newActivity = () => {
+    console.log('navigating to custom activity form', teamInfo.teamName);
+    navigate('/customActivity');
+  };
+
   // Populate team members + activities
   const teamMembers = teamInfo.teamMembers.map((ele) => (
     <li key={ele}>{ele}</li>
@@ -162,8 +168,23 @@ function TeamInfo(props) {
             getActivity();
           }}
         >
-          Add Activity
+          Random Activity
         </button>
+        {/* <Link to={{
+      pathname: '/CustomActivity',
+      state: {team_id: teamInfo.team_id}
+    }} >  */}
+        <Link to='/CustomActivity' state={teamInfo.team_id}>
+          <button
+            className='button align-self-end'
+            onClick={() => {
+              console.log('Trigger create a custom activity');
+              newActivity();
+            }}
+          >
+            Custom Activity
+          </button>
+        </Link>
       </div>
     </div>
   );
