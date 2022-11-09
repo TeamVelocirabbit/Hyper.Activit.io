@@ -79,18 +79,16 @@ function CustomActivity () {
               onChange={(e) => setPrice(e.target.value) } 
               value={price}>
               <option value="" disabled selected>Price of Activity</option>
-              <option value="0.0">Free!</option>
-              <option value="0.25">$</option>
-              <option value="0.50">$$</option>
-              <option value="0.75">$$$</option>
-              <option value="1.0">$$$$</option>
+              <option value={0.0}>Free!</option>
+              <option value={0.1}>$</option>
+              <option value={0.25}>$$</option>
+              <option value={0.50}>$$$</option>
+              <option value={0.75}>$$$$</option>
             </select>
           </div>
-          <Link to='/TeamInfo'>
             <button className='button'>Add Activity</button>
-          </Link>
           <Link to='/home'>
-            <button className='button'>Cancel</button>
+            <button className='button'>Back</button>
           </Link>
         </form>
       </div>
