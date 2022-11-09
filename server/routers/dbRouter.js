@@ -46,4 +46,18 @@ router.post('/addActivity', dbController.addActivity, (req, res) => {
 //// DELETE routes ////
 // Goals: Add delete for activities and accounts
 
+
+
+
+
+
+
+
+
+
+// Alex working on delete
+router.delete('/deleteActivity', (req, res) => {
+  console.log('');
+  return res.status(200).json({deleted: 'Delete test succesful'});
+})
 module.exports = router;
