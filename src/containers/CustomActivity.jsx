@@ -3,15 +3,15 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { TeamsContext } from '../App.jsx';
 
 
-function CustomActivity (props) {
+function CustomActivity () {
 
   const navigate = useNavigate();
   const location = useLocation();
   const totalTeamsArr = useContext(TeamsContext);
-
-  console.log(totalTeamsArr)
+  //console.log('state.props', state.props)
   console.log(location.state)
-  // const currTeam = totalTeamsArr.filter(obj => obj.teamName === location.state.teamName);
+ 
+  // const currTeam = totalTeamsArr.filter(obj => obj.teamName === location.state);
   // const [teamInfo, setUpdateTeam] = React.useState(...currTeam);
 
   const [activity, setActivity] = useState('');
@@ -27,12 +27,9 @@ function CustomActivity (props) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        "team_id": teamInfo.team_id,
+        "team_id": location.state,
         "activity": {
           activity: activity,
-          type: type,
-          price: price,
-          participants: participants,
         }
       })
     })
