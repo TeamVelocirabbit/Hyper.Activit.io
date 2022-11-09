@@ -9,6 +9,7 @@ import Home from './containers/Home.jsx';
 import CreateTeam from './containers/CreateTeam.jsx';
 import TeamInfo from './containers/TeamInfo.jsx';
 import ActivityInfo from './containers/ActivityInfo.jsx';
+import CustomActivity from './containers/CustomActivity.jsx';
 
 export const TeamsContext = React.createContext(null);
 
@@ -83,6 +84,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LoginPage setUser={syncUser} />} />
           <Route path='/home' element={<Home />} />
+          <Route path='/customActivity' element={<CustomActivity sync={syncStatetoDB} username={currentUser}/>} />
           <Route
             path='/createTeam'
             element={<CreateTeam sync={syncStatetoDB} username={currentUser} />}
