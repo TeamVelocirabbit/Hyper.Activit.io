@@ -119,6 +119,11 @@ function TeamInfo(props) {
     navigate('/home')
   }
 
+  const newActivity = () => {
+    console.log('navigating to custom activity form', teamInfo.teamName);
+    navigate('/customActivity')
+  }
+
   // Populate team members + activities
   const teamMembers = teamInfo.teamMembers.map(ele =>
     <li key={ele}>{ele}</li>
@@ -148,7 +153,15 @@ function TeamInfo(props) {
           console.log('Updating activities')
           getActivity();
         }}>
-        Add Activity
+        Random Activity
+      </button>
+      <button
+        className='button align-self-end'
+        onClick={() => {
+          console.log('Trigger create a custom activity')
+          newActivity();
+        }}>
+        Custom Activity
       </button>
       </div>
     </div>
