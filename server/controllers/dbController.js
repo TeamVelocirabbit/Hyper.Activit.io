@@ -91,11 +91,13 @@ dbController.verifyUser = (req, res, next) => {
 
   // Pull out the username and password from the request body
   const { username, password } = req.body;
+  
   console.log("Received username: " + username + " and password: " + password);
 
   // Find the user in the database
   User.findOne({ username: username })
     .then((user) => {
+      console.log(user)
       // Log to let us know the user was found
       console.log(`\u001b[1:32m User found in database: `);
       console.group();

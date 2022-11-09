@@ -22,7 +22,7 @@ router.get('/teaminfo/:team_id', dbController.getTeamInfo, (req, res) => {
 //// POST routes ////
 // Route to verify user on login/return boolean
 
-router.post('/login', dbController.verifyUser, cookieController.setSSIDCookie, (req, res) => {
+router.post('/login', dbController.verifyUser, sessionController.startSession, cookieController.setSSIDCookie, (req, res) => {
   return res.status(200).json({login_success: true});
 });
 
