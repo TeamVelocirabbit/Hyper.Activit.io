@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 const ActivityCard = (props) => {
   return (
     <div>
-      <Link
-        to='/activities'
-        state={props}
-      >
+      <Link to='/activities' state={props}>
         <button className='button' onClick={console.log('Move to activity')}>
           <div>
             <h2>{props.activity.activity}</h2>
@@ -16,7 +13,7 @@ const ActivityCard = (props) => {
         </button>
       </Link>
     </div>
-  )
-}
+  );
+};
 
 export default ActivityCard;

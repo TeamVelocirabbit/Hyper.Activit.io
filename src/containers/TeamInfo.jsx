@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { TeamsContext } from '../App.jsx';
-import { useNavigate, useLocation } from 'react-router-dom';
-
+import axios from 'axios';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 function TeamInfo(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const totalTeamsArr = useContext(TeamsContext);
 
-  const currTeam = totalTeamsArr.filter(obj => obj.teamName === location.state.teamName)
+  const currTeam = totalTeamsArr.filter(
+    (obj) => obj.teamName === location.state.teamName
+  );
   console.log('totalTeamsArr', totalTeamsArr);
   console.log('currTeam', currTeam);
+  console.log('props', props);
 
   // Initialize state to currTeams data (Obj)
   // *currTeam is a single object inside of an array which is why the spread
@@ -20,54 +23,57 @@ function TeamInfo(props) {
   // Split the team members string by commas
   console.log('teamInfo.teamMembers: ', teamInfo.teamMembers);
   // const teamMembersArr = (teamInfo.teamMembers[0]).split(',');
-  
+
   // Alex:Backend - Fetch activity from API and parse into following
   const getActivity = async () => {
     // Get random activity based on team size
-    const testActivity = await fetch(`api/activity/people/${teamInfo.teamMembers.length}`)
-      .then(res => res.json())
-      .then(activityData => {
+    const testActivity = await fetch(
+      `api/activity/people/${teamInfo.teamMembers.length}`
+    )
+      .then((res) => res.json())
+      .then((activityData) => {
         //Activity data: Object with associated deets
-        console.log('Current fetched activity:', activityData)
-        
+        console.log('Current fetched activity:', activityData);
+
         // Create clones to manipulate and update state with
         let currTeamClone;
         const totalTeamsClone = [...totalTeamsArr];
         for (const team of totalTeamsClone) {
           if (team.teamName === location.state.teamName) {
             // Make a POST request to add activity into current group
-            console.log('starting fetch request to add activity')
+            console.log('starting fetch request to add activity');
             fetch('db/addActivity', {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                "team_id": teamInfo.team_id,
-                "activity": {
+                team_id: teamInfo.team_id,
+                activity: {
                   activity: activityData.activity,
                   type: activityData.type,
                   price: activityData.price,
-                  participants: activityData.participants
-                }
-              })
+                  participants: activityData.participants,
+                },
+              }),
             })
-              .then(res => res.json)
-              .then(data => console.log('post data', data))
-              .catch(err => console.log('Err from POST activity:', err))
+              .then((res) => res.json)
+              .then((data) => console.log('post data', data))
+              .catch((err) => console.log('Err from POST activity:', err));
 
-            
             // Concurrently update state below
             team.teamActivities.push(activityData);
             // push into another KV pair => team.activityPrice.push(activityData.price)
             currTeamClone = team;
           }
         }
-        props.sync(totalTeamsClone)
-        setUpdateTeam({ ...currTeamClone })
+        props.sync(totalTeamsClone);
+        setUpdateTeam({ ...currTeamClone });
       })
-      .catch(err => console.error('Error in fetching activity from api: ', err));
-      
+      .catch((err) =>
+        console.error('Error in fetching activity from api: ', err)
+      );
+
     //   Data coming back looks like this
     //   {
     //     "activity": "Take your dog on a walk",
@@ -104,28 +110,47 @@ function TeamInfo(props) {
     // // useState helper updates our App.jsx total state for this user
     // props.sync(totalTeamsClone)
     // setUpdateTeam({ ...currTeamClone })
-  }
+  };
 
   const deleteTeam = () => {
     console.log('Deleting team:', teamInfo.teamName);
     const deletionClone = [...totalTeamsArr];
+    console.log(deletionClone,'pre splice')
     for (let i = 0; i < deletionClone.length; i++) {
       if (deletionClone[i].teamName === teamInfo.teamName) {
         deletionClone.splice(i, 1);
       }
     }
+    console.log(deletionClone,'post splice')
+    // console.log('fetch', teamInfo.team_id, location.state.teamMembers[0]);
+    fetch('/db/deleteTeam', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        team_id: teamInfo.team_id,
+        username: location.state.teamMembers[0],
+      }),
+    }).catch((err) => console.log('From deleteTeam:', err));
+
     alert('Team has been deleted!');
     props.sync(deletionClone);
-    navigate('/home')
-  }
+    navigate('/home');
+  };
+
+  const newActivity = () => {
+    console.log('navigating to custom activity form', teamInfo.teamName);
+    navigate('/customActivity');
+  };
 
   // Populate team members + activities
-  const teamMembers = teamInfo.teamMembers.map(ele =>
+  const teamMembers = teamInfo.teamMembers.map((ele) => (
     <li key={ele}>{ele}</li>
-  )
-  const activities = teamInfo.teamActivities.map(activity =>
+  ));
+  const activities = teamInfo.teamActivities.map((activity) => (
     <li key={activity.activity}>{activity.activity}</li>
-  )
+  ));
   // const price = map over teamInfo.price then render
   return (
     <div className='team-info container-card flex-column flex-center'>
@@ -133,26 +158,38 @@ function TeamInfo(props) {
       <h2>Team Members</h2>
       {teamMembers}
       <h2>Activities</h2>
-      <div className='list'>
-        {activities}
-      </div>
+      <div className='list'>{activities}</div>
       <div>
-      <button
-        className='button'
-        onClick={() => deleteTeam()}>
-        Delete Team
-      </button>
-      <button
-        className='button align-self-end'
-        onClick={() => {
-          console.log('Updating activities')
-          getActivity();
-        }}>
-        Add Activity
-      </button>
+        <button className='button' onClick={() => deleteTeam()}>
+          Delete Team
+        </button>
+        <button
+          className='button align-self-end'
+          onClick={() => {
+            console.log('Updating activities');
+            getActivity();
+          }}
+        >
+          Random Activity
+        </button>
+        {/* <Link to={{
+      pathname: '/CustomActivity',
+      state: {team_id: teamInfo.team_id}
+    }} >  */}
+        <Link to='/CustomActivity' state={teamInfo.team_id}>
+          <button
+            className='button align-self-end'
+            onClick={() => {
+              console.log('Trigger create a custom activity');
+              newActivity();
+            }}
+          >
+            Custom Activity
+          </button>
+        </Link>
       </div>
     </div>
-  )
+  );
 }
 
 export default TeamInfo;
