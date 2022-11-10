@@ -33,6 +33,8 @@ function CreateTeam(props) {
     }
   };
 
+
+
   const createTeam = (formData) => {
     console.log('Team ID + Members deposited into DB');
     const teamName = formData.target[0].value;

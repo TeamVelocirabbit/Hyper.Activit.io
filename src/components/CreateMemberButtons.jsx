@@ -11,18 +11,23 @@ When you hit 'Delete Member' - it triggers createTeam()
 */
 
 const CreateMemberButtons = (props) => {
-  console.log('memberLength', props.memberLength)
-  console.log('memberEntires', props.memberEntries)
+  // console.log('memberLength', props.memberLength)
+  // console.log('memberEntries', props.memberEntries)
   return (
     <div>
-      <button onClick={() => {
-        if (props.memberEntries.length) {
+      <button onClick = {() => {
+        
+        if (props.memberLength === 1) 
+          alert('Don\'t delete yourself!'
+          )
+         else { console.log('props',props)
           props.setMemberLength(props.memberLength - 1);
-          props.deleteMember();
-        } else {
-          alert('Don\'t delete yourself!');
-        }
-      }}>Delete Member</button>
+          props.deleteMember()}
+
+      }
+    
+  }>Delete Member</button>
+
       <button onClick={() => {
         if (props.memberLength === 4)
           alert(`
@@ -39,3 +44,4 @@ const CreateMemberButtons = (props) => {
 }
 
 export default CreateMemberButtons;
+

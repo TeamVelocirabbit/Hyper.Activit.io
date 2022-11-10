@@ -34,7 +34,10 @@ sessionController.startSession = (req, res, next) => {
     // res.locals.user_info = user;
     Session.create({ cookieId : res.locals.user_info.user_id }, (err, session) => {
         if (err) return next('Error in sessionController.startSession: ' + JSON.stringify(err));
-        else return next();
+        else return next(
+            log: `Error in sessionController.startSession: ${err}`,
+            message: { err: "Error occurred in sessionController.startSession." },
+        );
     })
 }
 
