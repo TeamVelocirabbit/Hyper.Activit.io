@@ -22,12 +22,12 @@ router.get('/teaminfo/:team_id', dbController.getTeamInfo, (req, res) => {
 //// POST routes ////
 // Route to verify user on login/return boolean
 
-router.post('/login', dbController.verifyUser, sessionController.startSession, cookieController.setSSIDCookie, (req, res) => {
-  return res.status(200).json({login_success: true});
+router.post('/login', dbController.verifyUser, cookieController.setSSIDCookie, (req, res) => {
+  return res.status(200).json({ login_success: true });
 });
 
 // Route to add a new user to the database
-router.post('/register', dbController.createUser,  (req, res) => {
+router.post('/register', dbController.createUser, (req, res) => {
   return res.status(200).json(res.locals.register_response);
 });
 
@@ -45,26 +45,26 @@ router.post('/addActivity', dbController.addActivity, (req, res) => {
 //// PUT routes ////
 // Check in frontend on what data type/edits they'll be sending
 router.put('/editActivity', dbController.editActivity, (req, res) => {
-  return res.status(200).json({update: 'Activity updated'});
+  return res.status(200).json({ update: 'Activity updated' });
 })
 
 router.put('/editTeam', dbController.editTeam, (req, res) => {
-  return res.status(200).json({update: 'Team updated'});
+  return res.status(200).json({ update: 'Team updated' });
 })
 
 //// DELETE routes ////
 // Delete team
 router.delete('/deleteTeam/', dbController.deleteTeam, dbController.deleteTeamFromUser, (req, res) => {
-  return res.status(200).json({deleted: 'Delete team successful'});
+  return res.status(200).json({ deleted: 'Delete team successful' });
 })
 
 // Delete activity from team
 router.delete('/deleteActivity', dbController.deleteActivity, (req, res) => {
-  return res.status(200).json({deleted: res.locals.updatedTeam});
+  return res.status(200).json({ deleted: res.locals.updatedTeam });
 })
 
 router.delete('/deleteUser/:username', dbController.deleteUser, (req, res) => {
-  return res.status(200).json({deleted: 'User deleted'});
+  return res.status(200).json({ deleted: 'User deleted' });
 })
 
 module.exports = router;

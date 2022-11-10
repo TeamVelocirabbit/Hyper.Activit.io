@@ -36,7 +36,7 @@ dbController.getUserInfo = (req, res, next) => {
     // Log to let us know the user was found
     console.log(`\u001b[1:32m User found in database: `);
     console.group();
-    console.log(user);
+    console.log('get user info controller', user);
     console.groupEnd();
 
     // Save the user info to res.locals
@@ -116,6 +116,7 @@ dbController.verifyUser = (req, res, next) => {
           }
           // If the passwords don't match
           else {
+            res.locals.login_success = false;
             return next({
               log: `Error in dbController.verifyUser: Passwords don't match`,
               message: { err: "Error occurred in dbController.verifyUser." },
