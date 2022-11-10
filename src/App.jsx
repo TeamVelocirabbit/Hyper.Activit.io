@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 import React, { useEffect, createContext } from 'react';
 
 import LoginPage from './containers/LoginPage.jsx';
@@ -14,7 +14,7 @@ import CustomActivity from './containers/CustomActivity.jsx';
 export const TeamsContext = React.createContext(null);
 
 function App() {
-  // test
+  const navigate = useNavigate();
   const location = useLocation();
   console.log('location state - username:', location.state);
   // Initialize state to be array of teams w/associated activities
@@ -34,16 +34,8 @@ function App() {
 
   // useEffect like componentDidMount - One time call
   useEffect(() => {
-    // Replace with fetch GET call to give us array of teams with associated activities
-    // Can use location.state to get username and pass to a fetch request
-    // fetch call to get user info, fetch team info for each team
 
-    // const fetchedUserTeams = await fetch(`/db/user/${location.state}`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log('fetched user teams: ', data);
-    // })
-    //   .catch((err) => console.error('Error in fetching teams list from user', err));
+
     const asyncFn = async () => {
       console.log('Current user', currentUser);
       const fetchedUserTeams = await fetch(`/db/user/${currentUser}`);
@@ -71,6 +63,10 @@ function App() {
       setUserData(arrOfFetchedTeams);
     };
     asyncFn();
+    if (window.localStorage.getItem('loginAuthenticated')){
+      syncUser(window.localStorage.getItem('loginAuthenticated'))
+      return navigate('/home', { state: localStorage.getItem('loginAuthenticated') });
+    }
   }, [currentUser]);
 
   return (
@@ -79,7 +75,6 @@ function App() {
         <div id='navbar'>
           <HomeButton />
           <SignoutButton />
-          <DeleteAccount username={currentUser} sync={syncStatetoDB} />
         </div>
         <Routes>
           <Route path='/' element={<LoginPage setUser={syncUser} />} />
@@ -95,6 +90,7 @@ function App() {
             element={<ActivityInfo sync={syncStatetoDB} />}
           />
         </Routes>
+          <DeleteAccount username={currentUser} sync={syncStatetoDB} />
       </div>
     </TeamsContext.Provider>
   );

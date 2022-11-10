@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 function DeleteAccount(props) {
   const navigate = useNavigate();
   const location = useLocation();
-  if (location.pathname === '/') return null;
+  if (location.pathname === '/' || location.pathname !== '/home') return null;
   // deleteAcc invoked when user clicks on deleteAccount button
   function deleteAcc() {
     if (confirm('Are you sure you want to delete your account?')) {

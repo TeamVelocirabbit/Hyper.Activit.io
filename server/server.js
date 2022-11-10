@@ -5,16 +5,16 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const boredRouter = require('./routers/boredRouter.js')
 const dbRouter = require('./routers/dbRouter.js');
+const cookieParser = require('cookie-parser');
+
 
 // Server parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-
+app.use(cookieParser());
 app.use('/api/activity', boredRouter);
-
-
 app.use('/db', dbRouter);
 
 // Catch all to redirect back to index.html (Login page)
