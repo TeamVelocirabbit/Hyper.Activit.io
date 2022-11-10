@@ -115,11 +115,13 @@ function TeamInfo(props) {
   const deleteTeam = () => {
     console.log('Deleting team:', teamInfo.teamName);
     const deletionClone = [...totalTeamsArr];
+    console.log(deletionClone,'pre splice')
     for (let i = 0; i < deletionClone.length; i++) {
       if (deletionClone[i].teamName === teamInfo.teamName) {
         deletionClone.splice(i, 1);
       }
     }
+    console.log(deletionClone,'post splice')
     // console.log('fetch', teamInfo.team_id, location.state.teamMembers[0]);
     fetch('/db/deleteTeam', {
       method: 'DELETE',

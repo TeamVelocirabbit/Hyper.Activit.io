@@ -79,7 +79,7 @@ function App() {
         <div id='navbar'>
           <HomeButton />
           <SignoutButton />
-          <DeleteAccount username={currentUser} />
+          <DeleteAccount username={currentUser} sync={syncStatetoDB} />
         </div>
         <Routes>
           <Route path='/' element={<LoginPage setUser={syncUser} />} />

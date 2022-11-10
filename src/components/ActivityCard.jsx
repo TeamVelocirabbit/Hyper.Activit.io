@@ -11,7 +11,6 @@ const ActivityCard = (props) => {
             <p>with {props.teamName}</p>
           </div>
         </button>
-        <button>Edit Activity</button>
       </Link>
     </div>
   );
