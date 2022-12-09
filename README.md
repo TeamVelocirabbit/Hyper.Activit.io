@@ -68,7 +68,6 @@ As one of the first full-stack applications created by this small set of develop
 
   - **Activity comments** - Some basic messaging functionality between team members was a feature that the team would have liked to have implemented; however, it, too, was deemed to be a stretch feature.
 
-  - **Activity and Team deletion** - The ability to delete activities and teams was also felt to be a stretch feature that could be useful to a user. 
 
 
 
